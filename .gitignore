@@ -1,21 +1,43 @@
-# Ignore dependencies
+# -----------------------------
+# Node.js dependencies
+# -----------------------------
 node_modules/
+bookit-frontend/node_modules/
+bookit-backend/node_modules/
 
-# Ignore environment files
+# -----------------------------
+# Environment variables
+# -----------------------------
 .env
 .env.*
 
-# Ignore build outputs
+# -----------------------------
+# Build outputs
+# -----------------------------
 dist/
 build/
+bookit-frontend/build/
+bookit-backend/dist/
 
-# Ignore OS / IDE files
-.DS_Store
+# -----------------------------
+# Logs
+# -----------------------------
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+logs/
+*.log
 
-# Ignore backup archives
+# -----------------------------
+# Backup archives
+# -----------------------------
 *.tar.gz
 bookit-backup.tar.gz
 
-# Ignore logs
-npm-debug.log*
-yarn-debug.log*
+# -----------------------------
+# OS / Editor files
+# -----------------------------
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
