@@ -1,14 +1,13 @@
 import axios from 'axios';
 import type { Experience, BookingData, PromoValidation } from '../types';
 
-const API_BASE_URL = 'https://bookit-fullstack-1o0q.onrender.com/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const api = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  baseURL: `${API_BASE_URL}/api`,
+  headers: { 'Content-Type': 'application/json' },
 });
+
 
 export const apiService = {
   // Get all experiences
