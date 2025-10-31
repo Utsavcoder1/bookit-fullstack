@@ -38,6 +38,7 @@ import react from '@vitejs/plugin-react'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: 'https://github.com/Utsavcoder1/bookit-fullstack.git', // ✅ just repo name, not full URL
+  base: '/bookit-fullstack/', // ✅ your repo name with slashes, not the full URL
   plugins: [react()],
 })
+
