@@ -5,43 +5,50 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Function to generate 100 slots for 2026
-const generateSlots = (basePrice, timeSlots) => {
+// Function to generate slots with HIGH capacity for testing
+const generateSlots = (basePrice, activityType) => {
   const slots = [];
   const startDate = new Date('2026-01-01');
   
-  for (let i = 0; i < 100; i++) {
+  // LARGE capacities for testing - won't fill up easily
+  const getMaxParticipants = (type) => {
+    switch(type) {
+      case 'boat': return 50;     // Large boat capacity
+      case 'adventure': return 40; // Big adventure groups
+      case 'food': return 30;      // Large food tours
+      case 'luxury': return 25;    // Good luxury capacity
+      case 'water': return 20;     // Decent water sports size
+      default: return 35;
+    }
+  };
+  
+  const maxParticipants = getMaxParticipants(activityType);
+  
+  for (let i = 0; i < 6; i++) {
     const currentDate = new Date(startDate);
-    currentDate.setDate(startDate.getDate() + i);
+    currentDate.setDate(startDate.getDate() + (i * 3)); // Every 3 days
     
-    const timeSlot = timeSlots[i % timeSlots.length];
-    const maxParticipants = [10, 12, 15, 20, 25][i % 5]; // Vary participant limits
-    const bookedParticipants = Math.floor(Math.random() * (maxParticipants * 0.7)); // Random bookings
+    const timeSlots = [
+      { start: "09:00", end: "12:00" },
+      { start: "14:00", end: "17:00" }
+    ];
+    const timeSlot = timeSlots[i % 2];
+    
+    // Start with only 10-30% booked so plenty of spots available
+    const bookedParticipants = Math.floor(Math.random() * (maxParticipants * 0.3));
     
     slots.push({
       date: currentDate,
       startTime: timeSlot.start,
       endTime: timeSlot.end,
       maxParticipants: maxParticipants,
-      bookedParticipants: bookedParticipants,
+      bookedParticipants: bookedParticipants, // Only partially booked
       price: basePrice
     });
   }
   
   return slots;
 };
-
-// Different time slots for variety
-const timeSlots = [
-  { start: "06:00", end: "08:00" },
-  { start: "08:00", end: "10:00" },
-  { start: "09:00", end: "12:00" },
-  { start: "10:00", end: "13:00" },
-  { start: "14:00", end: "16:00" },
-  { start: "15:00", end: "18:00" },
-  { start: "17:00", end: "20:00" },
-  { start: "18:00", end: "21:00" }
-];
 
 const sampleExperiences = [
   {
@@ -55,7 +62,7 @@ const sampleExperiences = [
     reviewCount: 124,
     included: ["Welcome drink", "Greek snacks", "Professional photographer", "Multilingual guide", "Safety equipment"],
     requirements: ["Swimwear", "Sunscreen", "Camera", "Comfortable shoes", "Jacket for evening"],
-    slots: generateSlots(89, timeSlots)
+    slots: generateSlots(89, 'boat') // 50 spots
   },
   {
     title: "Mountain Hiking Adventure",
@@ -68,7 +75,7 @@ const sampleExperiences = [
     reviewCount: 89,
     included: ["Professional mountain guide", "Hiking equipment rental", "Gourmet lunch pack", "Round-trip transportation", "First aid kit"],
     requirements: ["Hiking shoes", "2L water bottle", "Warm clothing layers", "25L backpack", "Energy snacks"],
-    slots: generateSlots(120, timeSlots)
+    slots: generateSlots(120, 'adventure') // 40 spots
   },
   {
     title: "Wine Tasting Tour in Tuscany",
@@ -81,7 +88,7 @@ const sampleExperiences = [
     reviewCount: 203,
     included: ["6 wine tastings", "Vineyard and cellar tour", "Expert sommelier guide", "Italian cheese and charcuterie platter", "Round-trip transportation"],
     requirements: ["ID for age verification", "Comfortable walking shoes", "Sun hat in summer"],
-    slots: generateSlots(75, timeSlots)
+    slots: generateSlots(75, 'food') // 30 spots
   },
   {
     title: "Hot Air Balloon Ride",
@@ -94,7 +101,7 @@ const sampleExperiences = [
     reviewCount: 278,
     included: ["Balloon ride", "Champagne toast", "Certificate of flight", "Photos", "Transportation"],
     requirements: ["Warm clothing", "Camera", "Comfortable shoes"],
-    slots: generateSlots(200, timeSlots)
+    slots: generateSlots(200, 'luxury') // 25 spots
   },
   {
     title: "Scuba Diving for Beginners",
@@ -107,7 +114,7 @@ const sampleExperiences = [
     reviewCount: 189,
     included: ["Equipment rental", "Professional instructor", "Underwater photos", "Refreshments", "Safety briefing"],
     requirements: ["Swimwear", "Towel", "No diving experience needed"],
-    slots: generateSlots(95, timeSlots)
+    slots: generateSlots(95, 'water') // 20 spots
   },
   {
     title: "Desert Safari Experience",
@@ -120,7 +127,7 @@ const sampleExperiences = [
     reviewCount: 421,
     included: ["Dune bashing", "Camel ride", "BBQ dinner", "Belly dance show", "Henna painting"],
     requirements: ["Comfortable clothing", "Sunglasses", "Camera"],
-    slots: generateSlots(85, timeSlots)
+    slots: generateSlots(85, 'adventure') // 40 spots
   }
 ];
 
@@ -131,8 +138,8 @@ const samplePromoCodes = [
     discountValue: 10,
     minAmount: 50,
     maxDiscount: 50,
-    validFrom: new Date('2025-01-01'),
-    validUntil: new Date('2026-12-31'),
+    validFrom: new Date(), // Starts from now
+    validUntil: new Date('2026-12-31'), // Until end of 2026
     usageLimit: 100,
     usedCount: 25,
     isActive: true
@@ -142,8 +149,8 @@ const samplePromoCodes = [
     discountType: "fixed",
     discountValue: 100,
     minAmount: 200,
-    validFrom: new Date('2025-01-01'),
-    validUntil: new Date('2026-12-30'),
+    validFrom: new Date(), // Starts from now
+    validUntil: new Date('2026-12-30'), // Until end of 2026
     usageLimit: 50,
     usedCount: 12,
     isActive: true
@@ -154,8 +161,8 @@ const samplePromoCodes = [
     discountValue: 15,
     minAmount: 100,
     maxDiscount: 75,
-    validFrom: new Date('2025-01-01'),
-    validUntil: new Date('2026-12-31'),
+    validFrom: new Date(), // Starts from now
+    validUntil: new Date('2026-12-31'), // Until end of 2026
     usageLimit: 200,
     usedCount: 89,
     isActive: true
@@ -166,8 +173,8 @@ const samplePromoCodes = [
     discountValue: 20,
     minAmount: 150,
     maxDiscount: 100,
-    validFrom: new Date('2025-06-01'),
-    validUntil: new Date('2026-08-31'),
+    validFrom: new Date('2024-06-01'), // Summer 2024
+    validUntil: new Date('2026-08-31'), // Summer 2026
     usageLimit: 75,
     usedCount: 0,
     isActive: true
@@ -177,8 +184,8 @@ const samplePromoCodes = [
     discountType: "fixed",
     discountValue: 5,
     minAmount: 20,
-    validFrom: new Date('2025-01-01'),
-    validUntil: new Date('2026-12-31'),
+    validFrom: new Date(), // Starts from now
+    validUntil: new Date('2026-12-31'), // Until end of 2026
     usageLimit: 1000,
     usedCount: 234,
     isActive: true
@@ -202,9 +209,11 @@ const seedData = async () => {
     console.log(`   Experiences: ${experiences.length}`);
     console.log(`   Promo Codes: ${promoCodes.length}`);
     
-    // Calculate total slots
+    // Calculate total slots and spots
     const totalSlots = experiences.reduce((sum, exp) => sum + exp.slots.length, 0);
+    const totalSpots = experiences.reduce((sum, exp) => sum + exp.slots.reduce((slotSum, slot) => slotSum + slot.maxParticipants, 0), 0);
     console.log(`   Total Slots: ${totalSlots}`);
+    console.log(`   Total Available Spots: ${totalSpots}`);
     
     console.log('\n💰 Promo Codes Available:');
     promoCodes.forEach(promo => {
