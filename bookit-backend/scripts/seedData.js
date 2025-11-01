@@ -5,6 +5,44 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+// Function to generate 100 slots for 2026
+const generateSlots = (basePrice, timeSlots) => {
+  const slots = [];
+  const startDate = new Date('2026-01-01');
+  
+  for (let i = 0; i < 100; i++) {
+    const currentDate = new Date(startDate);
+    currentDate.setDate(startDate.getDate() + i);
+    
+    const timeSlot = timeSlots[i % timeSlots.length];
+    const maxParticipants = [10, 12, 15, 20, 25][i % 5]; // Vary participant limits
+    const bookedParticipants = Math.floor(Math.random() * (maxParticipants * 0.7)); // Random bookings
+    
+    slots.push({
+      date: currentDate,
+      startTime: timeSlot.start,
+      endTime: timeSlot.end,
+      maxParticipants: maxParticipants,
+      bookedParticipants: bookedParticipants,
+      price: basePrice
+    });
+  }
+  
+  return slots;
+};
+
+// Different time slots for variety
+const timeSlots = [
+  { start: "06:00", end: "08:00" },
+  { start: "08:00", end: "10:00" },
+  { start: "09:00", end: "12:00" },
+  { start: "10:00", end: "13:00" },
+  { start: "14:00", end: "16:00" },
+  { start: "15:00", end: "18:00" },
+  { start: "17:00", end: "20:00" },
+  { start: "18:00", end: "21:00" }
+];
+
 const sampleExperiences = [
   {
     title: "Sunset Cruise in Santorini",
@@ -17,11 +55,7 @@ const sampleExperiences = [
     reviewCount: 124,
     included: ["Welcome drink", "Greek snacks", "Professional photographer", "Multilingual guide", "Safety equipment"],
     requirements: ["Swimwear", "Sunscreen", "Camera", "Comfortable shoes", "Jacket for evening"],
-    slots: [
-      { date: new Date('2024-02-20'), startTime: "17:00", endTime: "20:00", maxParticipants: 20, bookedParticipants: 8, price: 89 },
-      { date: new Date('2024-02-21'), startTime: "17:00", endTime: "20:00", maxParticipants: 20, bookedParticipants: 3, price: 89 },
-      { date: new Date('2024-02-22'), startTime: "17:00", endTime: "20:00", maxParticipants: 20, bookedParticipants: 15, price: 89 }
-    ]
+    slots: generateSlots(89, timeSlots)
   },
   {
     title: "Mountain Hiking Adventure",
@@ -34,11 +68,7 @@ const sampleExperiences = [
     reviewCount: 89,
     included: ["Professional mountain guide", "Hiking equipment rental", "Gourmet lunch pack", "Round-trip transportation", "First aid kit"],
     requirements: ["Hiking shoes", "2L water bottle", "Warm clothing layers", "25L backpack", "Energy snacks"],
-    slots: [
-      { date: new Date('2024-02-22'), startTime: "08:00", endTime: "14:00", maxParticipants: 15, bookedParticipants: 5, price: 120 },
-      { date: new Date('2024-02-23'), startTime: "08:00", endTime: "14:00", maxParticipants: 15, bookedParticipants: 12, price: 120 },
-      { date: new Date('2024-02-24'), startTime: "08:00", endTime: "14:00", maxParticipants: 15, bookedParticipants: 2, price: 120 }
-    ]
+    slots: generateSlots(120, timeSlots)
   },
   {
     title: "Wine Tasting Tour in Tuscany",
@@ -51,13 +81,8 @@ const sampleExperiences = [
     reviewCount: 203,
     included: ["6 wine tastings", "Vineyard and cellar tour", "Expert sommelier guide", "Italian cheese and charcuterie platter", "Round-trip transportation"],
     requirements: ["ID for age verification", "Comfortable walking shoes", "Sun hat in summer"],
-    slots: [
-      { date: new Date('2024-02-24'), startTime: "14:00", endTime: "18:00", maxParticipants: 12, bookedParticipants: 2, price: 75 },
-      { date: new Date('2024-02-25'), startTime: "14:00", endTime: "18:00", maxParticipants: 12, bookedParticipants: 7, price: 75 },
-      { date: new Date('2024-02-26'), startTime: "14:00", endTime: "18:00", maxParticipants: 12, bookedParticipants: 0, price: 75 }
-    ]
+    slots: generateSlots(75, timeSlots)
   },
-  
   {
     title: "Hot Air Balloon Ride",
     description: "Soar above beautiful landscapes in a serene hot air balloon ride. Experience breathtaking views and unforgettable memories from the sky.",
@@ -69,10 +94,7 @@ const sampleExperiences = [
     reviewCount: 278,
     included: ["Balloon ride", "Champagne toast", "Certificate of flight", "Photos", "Transportation"],
     requirements: ["Warm clothing", "Camera", "Comfortable shoes"],
-    slots: [
-      { date: new Date('2024-02-27'), startTime: "06:00", endTime: "08:00", maxParticipants: 16, bookedParticipants: 12, price: 200 },
-      { date: new Date('2024-02-28'), startTime: "06:00", endTime: "08:00", maxParticipants: 16, bookedParticipants: 5, price: 200 }
-    ]
+    slots: generateSlots(200, timeSlots)
   },
   {
     title: "Scuba Diving for Beginners",
@@ -85,10 +107,7 @@ const sampleExperiences = [
     reviewCount: 189,
     included: ["Equipment rental", "Professional instructor", "Underwater photos", "Refreshments", "Safety briefing"],
     requirements: ["Swimwear", "Towel", "No diving experience needed"],
-    slots: [
-      { date: new Date('2024-02-26'), startTime: "09:00", endTime: "13:00", maxParticipants: 6, bookedParticipants: 2, price: 95 },
-      { date: new Date('2024-02-27'), startTime: "09:00", endTime: "13:00", maxParticipants: 6, bookedParticipants: 4, price: 95 }
-    ]
+    slots: generateSlots(95, timeSlots)
   },
   {
     title: "Desert Safari Experience",
@@ -101,10 +120,7 @@ const sampleExperiences = [
     reviewCount: 421,
     included: ["Dune bashing", "Camel ride", "BBQ dinner", "Belly dance show", "Henna painting"],
     requirements: ["Comfortable clothing", "Sunglasses", "Camera"],
-    slots: [
-      { date: new Date('2024-02-28'), startTime: "15:00", endTime: "21:00", maxParticipants: 25, bookedParticipants: 18, price: 85 },
-      { date: new Date('2024-02-29'), startTime: "15:00", endTime: "21:00", maxParticipants: 25, bookedParticipants: 7, price: 85 }
-    ]
+    slots: generateSlots(85, timeSlots)
   }
 ];
 
@@ -115,8 +131,8 @@ const samplePromoCodes = [
     discountValue: 10,
     minAmount: 50,
     maxDiscount: 50,
-    validFrom: new Date('2024-01-01'),
-    validUntil: new Date('2025-12-31'),
+    validFrom: new Date('2026-01-01'),
+    validUntil: new Date('2026-12-31'),
     usageLimit: 100,
     usedCount: 25,
     isActive: true
@@ -126,8 +142,8 @@ const samplePromoCodes = [
     discountType: "fixed",
     discountValue: 100,
     minAmount: 200,
-    validFrom: new Date('2024-01-01'),
-    validUntil: new Date('2025-12-30'),
+    validFrom: new Date('2026-01-01'),
+    validUntil: new Date('2026-12-30'),
     usageLimit: 50,
     usedCount: 12,
     isActive: true
@@ -138,8 +154,8 @@ const samplePromoCodes = [
     discountValue: 15,
     minAmount: 100,
     maxDiscount: 75,
-    validFrom: new Date('2024-01-01'),
-    validUntil: new Date('2025-12-31'),
+    validFrom: new Date('2026-01-01'),
+    validUntil: new Date('2026-12-31'),
     usageLimit: 200,
     usedCount: 89,
     isActive: true
@@ -150,8 +166,8 @@ const samplePromoCodes = [
     discountValue: 20,
     minAmount: 150,
     maxDiscount: 100,
-    validFrom: new Date('2024-06-01'),
-    validUntil: new Date('2025-08-31'),
+    validFrom: new Date('2026-06-01'),
+    validUntil: new Date('2026-08-31'),
     usageLimit: 75,
     usedCount: 0,
     isActive: true
@@ -161,8 +177,8 @@ const samplePromoCodes = [
     discountType: "fixed",
     discountValue: 5,
     minAmount: 20,
-    validFrom: new Date('2024-01-01'),
-    validUntil: new Date('2025-12-31'),
+    validFrom: new Date('2026-01-01'),
+    validUntil: new Date('2026-12-31'),
     usageLimit: 1000,
     usedCount: 234,
     isActive: true
@@ -185,6 +201,10 @@ const seedData = async () => {
     console.log('\n📊 Data Summary:');
     console.log(`   Experiences: ${experiences.length}`);
     console.log(`   Promo Codes: ${promoCodes.length}`);
+    
+    // Calculate total slots
+    const totalSlots = experiences.reduce((sum, exp) => sum + exp.slots.length, 0);
+    console.log(`   Total Slots: ${totalSlots}`);
     
     console.log('\n💰 Promo Codes Available:');
     promoCodes.forEach(promo => {
